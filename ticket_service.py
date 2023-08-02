@@ -1,4 +1,3 @@
-
 from purchase_exceptions import InvalidPurchaseException
 from ticket_type_request import TicketTypeRequest
 from seatbooking.seat_reservation_service import SeatReservationService
@@ -19,23 +18,23 @@ class TicketService:
         
     def __check_adult_ticket(self,number_of_tickets):
         if number_of_tickets == 0:
-            raise InvalidPurchaseException
+            raise InvalidPurchaseException("No adults present")
 
     def __check_max_tickets(self,number_of_tickets):
         if number_of_tickets >= 20:
-            raise InvalidPurchaseException
+            raise InvalidPurchaseException("Maximum number of tickets exceeded")
 
     def __check_unaccompanied_infant(self,number_of_adults,number_of_infants):
         if number_of_infants > number_of_adults:
-            raise InvalidPurchaseException
+            raise InvalidPurchaseException("Too many infants for the number of adults selected")
 
     def __check_account_id_pos(self, account_id):
         if account_id <=0:
-            raise InvalidPurchaseException
+            raise InvalidPurchaseException("Account ID needs to be positive")
     
     def __check_account_id_int(self, account_id):
         if type(account_id) != int:
-            raise InvalidPurchaseException
+            raise InvalidPurchaseException("Account ID needs to be an integer")
 
     def purchase_tickets(self, account_id=None, ticket_type_requests=[]):
 
@@ -72,16 +71,6 @@ class TicketService:
 
       cost = 20*no_of_adults + 10*no_of_children
 
-      # print(no_of_adults)
-      # print(no_of_children)
-      # print(no_of_infants)
-      # print(no_of_seats)
-      # print(no_of_tickets)
-      # print(cost)
-       
-              
-        #raise InvalidPurchaseException
-    
       self.seat_reservation_service.reserve_seat(account_id, no_of_seats)
       self.ticket_payment_service.make_payment(account_id, cost)
             
